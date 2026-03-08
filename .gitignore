@@ -1,0 +1,16 @@
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Java
+*.class
+
+# Logs
+logs/
+*.log
