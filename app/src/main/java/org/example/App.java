@@ -2,22 +2,17 @@ package org.example;
 
 import jakarta.validation.Valid;
 import org.example.models.Post;
+import org.example.services.PostService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 
 @SpringBootApplication
 @RestController
 public class App {
-    // Хранилище добавленных постов, то есть обычный список
-    private List<Post> posts = new ArrayList<Post>();
-
 
     //Запуск приложения
     public static void main(String[] args) {
@@ -25,45 +20,39 @@ public class App {
     }
 
     @GetMapping("/posts") // Список страниц
-    public List<Post> index(@RequestParam(defaultValue = "10") Integer limit) {
-        return posts.stream().limit(limit).toList();
-    }
-
-    @PostMapping("/posts")
-    public Post create(@Valid @RequestBody Post post) {
-        post.setCreatedAt(LocalDateTime.now());
-        posts.add(post);
-        return post;
-    }
-
-    @PutMapping("/posts/{id}") // Обновление страницы
-    public Post update(@PathVariable String id, @RequestBody Post data) {
-        var maybePage = posts.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst();
-        if (maybePage.isPresent()) {
-            var page = maybePage.get();
-             page.setTitle(data.getTitle());
-            page.setContent(data.getContent());
-            page.setContent(data.getContent());
-            page.setAuthor(data.getAuthor());
-            page.setCreatedAt(LocalDateTime.now());
-        }
-        return data;
-    }
-
-    @DeleteMapping("/posts/{id}") //Удалить
-    public void destroy(@PathVariable String id) {
-        posts.removeIf(p -> p.getId().equals(id));
+    public ResponseEntity<List<Post>> allPosts(@RequestParam(defaultValue = "10") Integer limit) {
+        var result = PostService.getAllPosts(limit);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(result.size()))
+                .body(result);
     }
 
     @GetMapping("/posts/{id}") //Получить пост
-    public Optional<Post> show(@PathVariable String id) {
-        var page = posts.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst();
-        return page;
+    public ResponseEntity<Post> getPost(@PathVariable String id) {
+        var post = PostService.find(id);
+        return ResponseEntity.of(post);
     }
+
+    @PostMapping("/posts") // Создать пост
+    public ResponseEntity<Post> create(@Valid @RequestBody Post post) {
+        PostService.create(post);
+        ResponseEntity.ok("все получилось");
+        return ResponseEntity.status(201).body(post);
+    }
+
+    @PutMapping("/posts/{id}") // Обновить пост
+    public ResponseEntity<Post> update(@PathVariable String id, @RequestBody Post data) {
+        PostService.updatePost(id, data);
+        return ResponseEntity.status(200).body(data);
+    }
+
+    @DeleteMapping("/posts/{id}") //Удалить
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        PostService.deletePost(id);
+        return ResponseEntity.status(204).body(null);
+    }
+
+
 
 
 
