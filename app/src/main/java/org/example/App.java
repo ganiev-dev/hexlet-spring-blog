@@ -12,6 +12,10 @@ public class App {
     public String home() {
         return "Добро пожаловать в Hexlet Spring Blog!";
     }
+    @GetMapping("/about")
+    public String about() {
+        return "Пока это просто текстовый проект на спринге";
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
