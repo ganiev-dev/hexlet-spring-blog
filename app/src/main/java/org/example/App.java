@@ -2,7 +2,9 @@ package org.example;
 
 import jakarta.validation.Valid;
 import org.example.models.Post;
+import org.example.models.User;
 import org.example.services.PostService;
+import org.example.services.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,8 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
-    @GetMapping("/posts") // Список страниц
+
+    @GetMapping("/api/posts") // Список страниц
     public ResponseEntity<List<Post>> allPosts(@RequestParam(defaultValue = "10") Integer limit) {
         var result = PostService.getAllPosts(limit);
         return ResponseEntity.ok()
@@ -27,30 +30,31 @@ public class App {
                 .body(result);
     }
 
-    @GetMapping("/posts/{id}") //Получить пост
-    public ResponseEntity<Post> getPost(@PathVariable String id) {
+    @GetMapping("/api/posts/{id}") //Получить пост
+    public ResponseEntity<Post> getPost(@PathVariable Long id) {
         var post = PostService.find(id);
         return ResponseEntity.of(post);
     }
 
-    @PostMapping("/posts") // Создать пост
-    public ResponseEntity<Post> create(@Valid @RequestBody Post post) {
+    @PostMapping("/api/posts") // Создать пост
+    public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
         PostService.create(post);
         ResponseEntity.ok("все получилось");
         return ResponseEntity.status(201).body(post);
     }
 
-    @PutMapping("/posts/{id}") // Обновить пост
-    public ResponseEntity<Post> update(@PathVariable String id, @RequestBody Post data) {
+    @PutMapping("/api/posts/{id}") // Обновить пост
+    public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post data) {
         PostService.updatePost(id, data);
         return ResponseEntity.status(200).body(data);
     }
 
-    @DeleteMapping("/posts/{id}") //Удалить
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    @DeleteMapping("/api/posts/{id}") //Удалить
+    public ResponseEntity<Void> deletePost(@PathVariable String id) {
         PostService.deletePost(id);
         return ResponseEntity.status(204).body(null);
     }
+
 
 
 

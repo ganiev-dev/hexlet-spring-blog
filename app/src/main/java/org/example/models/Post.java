@@ -23,6 +23,6 @@ public class Post {
 
     private String author;
     private LocalDateTime createdAt;
-    private String id;
+    private Long id;
 
 }

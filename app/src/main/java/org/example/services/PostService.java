@@ -28,7 +28,7 @@ public class PostService {
         posts.removeIf(p -> p.getId().equals(id));
     }
 
-    public static Optional<Post> find(String id) {
+    public static Optional<Post> find(Long id) {
         return posts.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
