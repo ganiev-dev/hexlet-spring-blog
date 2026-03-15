@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    show-sql: true       # вывод SQL-запросов
+  output:
+    ansi:
+      enabled: always    # цветной вывод (ALWAYS/DETECT/NEVER)
+
+logging:
+  pattern:
+    dateformat: "yyyy-MM-dd HH:mm:ss"  # кастомный формат даты в логах
+
+app:
+  welcome-message: "Welcome to Spring blog!"  # наше кастомное сообщение
+
+  # Пагинация
+  page-size: 20
