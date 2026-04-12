@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class PostService {
     // Хранилище добавленных постов
-    private static List<Post> posts = new ArrayList<Post>();
+    private static List<Post> posts = new ArrayList<>();
 
 
     public static Post create(Post post) {

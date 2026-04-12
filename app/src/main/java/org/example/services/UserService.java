@@ -13,6 +13,7 @@ public class UserService {
 
 
     public static User createUser(@Valid User user) {
+
         users.add(user);
         return user;
     }
